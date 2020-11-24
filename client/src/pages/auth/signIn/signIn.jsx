@@ -8,15 +8,70 @@ import {
   Container,
   Col,
   Row,
+  Alert,
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import Proptypes from "prop-types";
+import { login } from "../../../actions/authActions";
+import { clearError } from "../../../actions/errorActions";
+import { Link, withRouter } from "react-router-dom";
 import signIn from "../SignUp/signUp.jpg";
-import AppNavBar from "../../components/appNavbar";
-import Footer from "../../components/appFooter";
+import AppNavBar from "../../../components/appNavbar";
+import Footer from "../../../components/appFooter";
 
 class SignIn extends Component {
+  state = {
+    email: " ",
+    password: " ",
+    msg: null,
+  };
+  static propTypes = {
+    isAuthenticated: Proptypes.bool,
+    error: Proptypes.object.isRequired,
+    login: Proptypes.func.isRequired,
+    clearError: Proptypes.func.isRequired,
+    user: Proptypes.object,
+  };
+
+  componentDidUpdate(prevProps) {
+    const { error } = this.props;
+    // if Authenticated load profile page
+    const { history, isAuthenticated, user } = this.props;
+    if (isAuthenticated === true) {
+      history.push(`/profile/${user._id}`);
+    }
+    if (error !== prevProps.error) {
+      //check for register error
+      if (error.id === "LOGIN_FAIL") {
+        this.setState({ msg: error.msg.msg });
+      } else {
+        this.setState({ msg: null });
+      }
+    }
+  }
+
   onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    if (this.state.msg) {
+      this.props.clearError();
+      this.setState({ msg: null });
+      this.setState({ [e.target.name]: e.target.value });
+    } else {
+      this.setState({ [e.target.name]: e.target.value });
+    }
+  };
+
+  onSubmit = (e) => {
+    e.preventDefault();
+
+    const { email, password } = this.state;
+
+    //create user object
+    const User = {
+      email,
+      password,
+    };
+    //attempt to register user
+    this.props.login(User);
   };
 
   render() {
@@ -35,16 +90,19 @@ class SignIn extends Component {
             <Col>
               <h1>Welcome back!</h1>
               <p>Log in and stay connected</p>
-              <Form>
+              {this.state.msg ? (
+                <Alert color="danger">{this.state.msg}</Alert>
+              ) : null}
+              <Form onSubmit={this.onSubmit}>
                 <FormGroup>
                   <Row>
                     <Col>
                       <Label for="email">Email</Label>
                       <Input
                         type="text"
-                        name="name"
+                        name="email"
                         id="email"
-                        placeholder="eg johndoe@gmail.com"
+                        placeholder="type email"
                         onChange={this.onChange}
                       />
                     </Col>
@@ -54,9 +112,9 @@ class SignIn extends Component {
                       <Label for="name">Password</Label>
                       <Input
                         type="password"
-                        name="name"
+                        name="password"
                         id="password"
-                        placeholder="at least 6 characters"
+                        placeholder="password"
                         onChange={this.onChange}
                       />
                     </Col>
@@ -115,4 +173,12 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  user: state.auth.user,
+});
+
+export default withRouter(
+  connect(mapStateToProps, { login, clearError })(SignIn)
+);

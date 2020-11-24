@@ -25,7 +25,14 @@
 .nav_menu.active {
   left: 0;
   transition: 350ms;
+  z-index: 100;
 }
+
+/* .hover_col a:hover {
+  background-color: #007bff !important;
+  color: white !important;
+} */
+
 .nav_text {
   display: flex;
   justify-content: flex-start;
@@ -74,4 +81,13 @@
 .i_style {
   font-size: 30px !important;
   margin-left: 65px;
+}
+.align_right {
+  text-align: right;
+}
+.bg_nav {
+  background-color: #f8f9fa;
+}
+.increase_index {
+  z-index: 100;
 }

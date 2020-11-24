@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 //define Schema
-var Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
-var userSchema = new Schema({
+const userSchema = new Schema({
   name: { type: String, required: true, trim: true },
   email: { type: String, required: true, trim: true },
   password: { type: String, required: true },
   location: [
     {
-      country: { type: String, required: true, trim: true },
-      city: { type: String, required: true, trim: true },
+      country: { type: String, trim: true },
+      city: { type: String, trim: true },
     },
   ],
   skillSet: [{ type: String, trim: true }],
@@ -19,6 +19,6 @@ var userSchema = new Schema({
 });
 
 //create model
-var User = mongoose.model("user", userSchema);
+const User = mongoose.model("user", userSchema);
 
 module.exports = User;

@@ -25,15 +25,15 @@ class Footer extends Component {
         <div style={this.style} className="footer">
           <Container>
             <img
-              className="mt-3"
+              className="mt-3 mb-3"
               style={this.style_image}
               src={devfoot}
               alt="footer"
             />
-            <p className="mb-2" style={this.style_words}>
+            <p className="mb-5" style={this.style_words}>
               Proudly an open source project by the Developers circle Benin
             </p>
-            <hr style={{ border: "solid 0.5px white" }} />
+            <hr className="mb-5" style={{ border: "solid 0.5px white" }} />
             <h6 className="mt-2" style={this.style_words}>
               Terms and policy
             </h6>

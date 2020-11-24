@@ -4,17 +4,25 @@ const mongoose = require("mongoose");
 const chalk = require("chalk");
 const userApi = require("./routes/api/users");
 const authApi = require("./routes/api/auth");
-
 const adminRoute = require("./routes/admin");
 
 const app = express();
-
 const PORT = process.env.PORT || 5000;
 const localhost = "127.0.0.1";
 
+// allow CORS
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 //read from body
 app.use(express.json());
 
+/* app.use(express.urlencoded({ extended: true })); */
 //database config
 //defualt mongoose connection
 const mongoDB = process.env.mongoURI;

@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
 
-auth = (req, res, next) => {
+const auth = (req, res, next) => {
   const token = req.header("x-auth-token");
   //check for token
   if (!token) {
-    res.status(401).json({ msg: "no token authoriazation denied" });
+    return res.status(401).json({ msg: "no token authoriazation denied" });
   }
   try {
     //verify token

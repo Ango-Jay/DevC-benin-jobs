@@ -11,15 +11,28 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import appNav from "./icons/brandname.svg";
+import { connect } from "react-redux";
+import Proptypes from "prop-types";
+import { logout } from "../actions/authActions";
 
 class AppNavBar extends Component {
   state = {
     isOpen: false,
   };
+
+  static propTypes = {
+    isAuthenticated: Proptypes.bool,
+    logout: Proptypes.func.isRequired,
+  };
+
   toggle = () => {
     this.setState({
       isOpen: !this.state.isOpen,
     });
+  };
+
+  onClick = () => {
+    this.props.logout();
   };
 
   render() {
@@ -63,20 +76,38 @@ class AppNavBar extends Component {
                     Contact us
                   </Link>
                 </NavItem>
-                <NavItem className="ml-3 mb-3">
+                {this.props.isAuthenticated ? null : (
+                  <NavItem className="ml-3 mb-3">
+                    <Button outline color="primary" size="sm">
+                      <Link to="/" className="nav-link">
+                        Sign Up
+                      </Link>
+                    </Button>
+                  </NavItem>
+                )}
+                {this.props.isAuthenticated ? (
+                  <NavItem className="ml-3 mb-3">
+                    <Button
+                      outline
+                      color="primary"
+                      size="sm"
+                      onClick={this.onClick}
+                    >
+                      <Link to="#" className="nav-link">
+                        Log out
+                      </Link>
+                    </Button>
+                  </NavItem>
+                ) : null}
+
+                {/* <NavItem className="ml-3 mb-3">
                   <Button outline color="primary" size="sm">
                     <Link to="/" className="nav-link">
-                      Home
+                      Sign Up
                     </Link>
                   </Button>
                 </NavItem>
-                <NavItem className="ml-3 mb-3">
-                  <Button color="primary" size="sm">
-                    <Link to="/signUp" className="nav-link">
-                      Sign up
-                    </Link>
-                  </Button>
-                </NavItem>
+                 */}
               </Nav>
             </Collapse>
           </Container>
@@ -86,4 +117,8 @@ class AppNavBar extends Component {
   }
 }
 
-export default AppNavBar;
+const MapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(MapStateToProps, { logout })(AppNavBar);

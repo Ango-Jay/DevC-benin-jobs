@@ -15,3 +15,7 @@
 .inline_nav {
   display: inline-block;
 }
+.link_change :hover {
+  background-color: white !important;
+  color: #084482 !important;
+}

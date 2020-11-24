@@ -1,32 +1,21 @@
-const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 /*USER API CONTROLLERS*/
 exports.get_users = (req, res) => {
   res.send("hope");
 };
 
-exports.delete_user = (req, res) => {
-  res.send("hope");
-};
-
 exports.post_user = (req, res) => {
-  const {
-    name,
-    email,
-    password,
-    location,
-    skillSet,
-    socialMedia,
-    phoneNumber,
-    role,
-  } = req.body;
+  const { name, email, password } = req.body;
 
   //Validation
+
   if (!name || !email || !password) {
     return res.status(400).json({ msg: "Please enter all fields" });
   }
+
   //check for existing user
   User.findOne({ email }).then((user) => {
     if (user) {
@@ -36,16 +25,13 @@ exports.post_user = (req, res) => {
       name,
       email,
       password,
-      location,
-      skillSet,
-      socialMedia,
-      phoneNumber,
-      role,
     });
     //create salt and hash
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {
-        if (err) throw err;
+        if (err) {
+          throw err;
+        }
         newUser.password = hash;
         newUser.save().then((user) => {
           jwt.sign(
@@ -53,8 +39,22 @@ exports.post_user = (req, res) => {
             process.env.jwtSecret,
             { expiresIn: 3600 },
             (err, token) => {
-              if (err) throw err;
-              res.json({ token, user });
+              if (err) {
+                throw err;
+              }
+              res.json({
+                token,
+                user: {
+                  id: user.id,
+                  name: user.name,
+                  email: user.email,
+                  location: user.location,
+                  skillSet: user.skillSet,
+                  socialMedia: user.socialMedia,
+                  phoneNumber: user.phoneNumber,
+                  role: user.role,
+                },
+              });
             }
           );
         });

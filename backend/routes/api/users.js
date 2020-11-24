@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 const apiContoller = require("../../controllers/apiContoller");
 
@@ -6,7 +7,7 @@ const apiContoller = require("../../controllers/apiContoller");
 //find users
 router.get("/", apiContoller.get_users);
 //DELETE users
-router.delete("/:id", apiContoller.delete_user);
+// router.put("/:id", apiContoller.update_user);
 //POST user
 //create user
 router.post("/", apiContoller.post_user);

@@ -1,6 +1,6 @@
-const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 /*USER API CONTROLLERS*/
 exports.get_userdata = (req, res) => {
@@ -11,8 +11,60 @@ exports.get_userdata = (req, res) => {
     });
 };
 
-exports.delete_user = (req, res) => {
-  res.send("hope");
+exports.update_user_skill = (req, res) => {
+  const { id } = req.query;
+  const { skillSet } = req.body;
+  const query = User.findById(id);
+  query.then((user) => {
+    user.skillSet.addToSet(skillSet);
+    user.markModified("skillSet");
+    user
+      .save()
+      .then((user) => {
+        res.json({
+          user: {
+            name: user.name,
+            email: user.email,
+            location: user.location,
+            skillSet: user.skillSet,
+            socialMedia: user.socialMedia,
+            phoneNumber: user.phoneNumber,
+            role: user.role,
+          },
+        });
+      })
+      .catch((e) => {
+        res.json({ msg: e });
+      });
+  });
+};
+
+exports.update_user_social = (req, res) => {
+  const { id } = req.query;
+  const { socialMedia } = req.body;
+  const query = User.findById(id);
+  query.then((user) => {
+    user.socialMedia.addToSet(socialMedia);
+    user.markModified("socialMedia");
+    user
+      .save()
+      .then((user) => {
+        res.json({
+          user: {
+            name: user.name,
+            email: user.email,
+            location: user.location,
+            skillSet: user.skillSet,
+            socialMedia: user.socialMedia,
+            phoneNumber: user.phoneNumber,
+            role: user.role,
+          },
+        });
+      })
+      .catch((e) => {
+        res.json({ msg: e });
+      });
+  });
 };
 
 exports.post_user = (req, res) => {

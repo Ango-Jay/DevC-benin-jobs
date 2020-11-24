@@ -8,17 +8,84 @@ import {
   Container,
   Col,
   Row,
+  Alert,
 } from "reactstrap";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import Proptypes from "prop-types";
+import { register } from "../../../actions/authActions";
+import { clearError } from "../../../actions/errorActions";
 import signUp from "./signUp.jpg";
-import AppNavBar from "../../components/appNavbar";
-import Footer from "../../components/appFooter";
+import AppNavBar from "../../../components/appNavbar";
+import Footer from "../../../components/appFooter";
 
 class SignUp extends Component {
-  onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  state = {
+    name: " ",
+    email: " ",
+    password: " ",
+    msg: null,
+  };
+  static propTypes = {
+    isAuthenticated: Proptypes.bool,
+    error: Proptypes.object.isRequired,
+    register: Proptypes.func.isRequired,
+    clearError: Proptypes.func.isRequired,
+    user: Proptypes.object,
   };
 
+  componentDidUpdate(prevProps) {
+    const { error } = this.props;
+    // if Authenticated load profile page
+    const { history, isAuthenticated, user } = this.props;
+    if (isAuthenticated === true) {
+      history.push(`/profile/${user.id}`);
+    }
+    if (error !== prevProps.error) {
+      //check for register error
+      if (error.id === "REGISTER_FAIL") {
+        this.setState({ msg: error.msg.msg });
+      } else {
+        this.setState({ msg: null });
+      }
+    }
+  }
+
+  onChange = (e) => {
+    if (this.state.msg) {
+      this.props.clearError();
+      this.setState({ msg: null });
+      this.setState({ [e.target.name]: e.target.value });
+    } else {
+      this.setState({ [e.target.name]: e.target.value });
+    }
+  };
+
+  onSubmit = (e) => {
+    e.preventDefault();
+
+    const { name, email, password } = this.state;
+
+    //create user object
+    const newUser = {
+      name,
+      email,
+      password,
+    };
+    //attempt to register user
+    this.props.register(newUser);
+  };
+
+  /* goProfile = () => {
+    const { history, isAuthenticated } = this.props;
+    if (isAuthenticated === true) {
+      history.push("/profile");
+    }
+  }; */
+
   render() {
+    // clear errors
+    // this.props.clearError();
     return (
       <div>
         <AppNavBar />
@@ -43,13 +110,16 @@ class SignUp extends Component {
                 Create a profile to stay connected with the 1000+ graduates and
                 potential employers.
               </p>
-              <Form>
+              {this.state.msg ? (
+                <Alert color="danger">{this.state.msg}</Alert>
+              ) : null}
+              <Form onSubmit={this.onSubmit}>
                 <FormGroup>
                   <Label for="name">Full Name</Label>
                   <Input
                     type="text"
                     name="name"
-                    id="user_name"
+                    id="name"
                     placeholder="eg John Doe"
                     onChange={this.onChange}
                   />
@@ -58,46 +128,35 @@ class SignUp extends Component {
                       <Label for="email">Email</Label>
                       <Input
                         type="text"
-                        name="name"
+                        name="email"
                         id="email"
                         placeholder="eg johndoe@gmail.com"
-                        onChange={this.onChange}
-                      />
-                    </Col>
-                    <Col>
-                      <Label for="name">Admin ID</Label>
-                      <Input
-                        type="text"
-                        name="name"
-                        id="user_name"
-                        placeholder="eg ADM-200"
                         onChange={this.onChange}
                       />
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      <Label for="name">Password</Label>
+                      <Label for="password">Password</Label>
                       <Input
                         type="password"
-                        name="name"
+                        name="password"
                         id="password"
                         placeholder="at least 6 characters"
                         onChange={this.onChange}
                       />
                     </Col>
-                    <Col>
+                    {/* <Col>
                       <Label for="name">Confirm Password</Label>
                       <Input
                         type="password"
-                        name="name"
+                        name="password"
                         id="password"
                         placeholder="at least 6 characters"
                         onChange={this.onChange}
                       />
-                    </Col>
+                    </Col> */}
                   </Row>
-
                   <div className="mt-3">
                     <Input
                       type="checkbox"
@@ -107,10 +166,12 @@ class SignUp extends Component {
                       I agree to the{" "}
                       <a href="/terms">terms policy conditions</a>
                     </span>
-                  </div>
+                  </div>{" "}
+                  {/* <Link to="/profile"> */}{" "}
                   <Button color="primary" size="lg" block>
                     SignUp
                   </Button>
+                  {/* </Link> */}
                 </FormGroup>
               </Form>
 
@@ -150,7 +211,7 @@ class SignUp extends Component {
               </Row>
 
               <p style={{ textAlign: "center" }}>
-                Have an account already? <a href="/login">Log in</a>
+                Have an account already? <a href="/signIn">Log in</a>
               </p>
             </Col>
           </Row>
@@ -160,5 +221,12 @@ class SignUp extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  error: state.error,
+  user: state.auth.user,
+});
 
-export default SignUp;
+export default withRouter(
+  connect(mapStateToProps, { register, clearError })(SignUp)
+);
