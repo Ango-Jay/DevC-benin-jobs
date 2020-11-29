@@ -1,7 +1,0 @@
- {isAuthenticated
-          ? setTimeout(() => {
-              this.LoadProfile();
-            }, 5000)
-          : setTimeout(() => {
-              history.push("/");
-            }, 6000)}
