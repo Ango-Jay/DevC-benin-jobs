@@ -10,6 +10,7 @@ import SkillSetModal from "./skillSet/skillSetModal";
 import SocialMediaList from "./socialMedia/socialMediaList";
 import SocialMediaModal from "./socialMedia/socialMediaModal";
 import { ReactComponent as UserIcon } from "../../../components/icons/man.svg";
+import Home from "../../Home/home";
 import "./profile.css";
 
 class Profile extends Component {
@@ -24,24 +25,90 @@ class Profile extends Component {
     isAuthenticated: PropTypes.bool,
   };
 
-  /*  componentDidMount() {
-    const { history, isAuthenticated } = this.props;
+  LoadProfile = () => {
+    return (
+      <div>
+        <SideBar />
+        <div className="reduce_index">
+          <Container>
+            <Row className="m-3 ">
+              <Col style={this.style}>
+                <UserIcon className="m-4" />
+                {this.props.user ? (
+                  <h3 className="mt-3"> {this.props.user.name}</h3>
+                ) : null}
+                <h5>Fullstack Developer</h5>
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <i className="fa fa-star" />
+                <hr />
+                <i className="fa fa-map-pin" />
+                <span> Lagos, Nigeria</span>
+                <br />
+                <i className="fa fa-envelope" />
+                {this.props.user ? <span> {this.props.user.email}</span> : null}
+                <br />
+                <i className="fa fa-phone" />
+                <span> 081765788</span>
+                <br />
+                <Button color="primary mb-4">Edit Profile</Button>
+              </Col>
+              <Col>
+                {/* <Container> */}
+                <Row className="m-3">
+                  <Col style={this.style} className="m-3">
+                    <h3>CV</h3>
+                    <h5>File Uploaded</h5>
+                  </Col>
+                  <Col style={this.style} className="m-3">
+                    <h3>Portfolio</h3>
+                    <h5>Upload</h5>
+                  </Col>
+                </Row>
+                {/* </Container>
+          <Container> */}
+                <Row style={this.style} className="m-3">
+                  <Col>
+                    <SkillSetModal />
+                    <SkillSetList />
+                  </Col>
+                </Row>
+                {/* </Container>
+          <Container> */}
+                <Row style={this.style} className="m-3">
+                  <Col>
+                    <SocialMediaModal />
+                    <SocialMediaList />
+                  </Col>
+                </Row>
+                {/* </Container> */}
+              </Col>
+            </Row>
+          </Container>
+        </div>
+        <AppFooter />
+      </div>
+    );
+  };
 
-    if (isAuthenticated === false) {
-      history.push("/");
-    }
-  } */
-  /*  load_profile = () => {
-    const { history, isAuthenticated } = this.props;
-
-    if (isAuthenticated === false) {
-      history.push("/");
-    }
+  /*  ProfileFunc = () => {
+    const { isAuthenticated } = this.props;
+    setTimeout(() => {
+      if (isAuthenticated) {
+        return this.LoadProfile;
+      } else {
+        <Home />;
+      }
+    }, 2000);
   }; */
+
   render() {
     const { history, isAuthenticated } = this.props;
     return (
       <React.Fragment>
+        {/* {this.ProfileFunc()} */}
         {isAuthenticated ? (
           <div>
             <SideBar />
@@ -86,7 +153,7 @@ class Profile extends Component {
                       </Col>
                     </Row>
                     {/* </Container>
-                  <Container> */}
+          <Container> */}
                     <Row style={this.style} className="m-3">
                       <Col>
                         <SkillSetModal />
@@ -94,7 +161,7 @@ class Profile extends Component {
                       </Col>
                     </Row>
                     {/* </Container>
-                  <Container> */}
+          <Container> */}
                     <Row style={this.style} className="m-3">
                       <Col>
                         <SocialMediaModal />
@@ -109,7 +176,7 @@ class Profile extends Component {
             <AppFooter />
           </div>
         ) : (
-          setTimeout(history.push("/"), 5000)
+          <Home />
         )}
       </React.Fragment>
     );

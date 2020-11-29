@@ -3,10 +3,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 /*USER API CONTROLLERS*/
-exports.get_users = (req, res) => {
-  res.send("hope");
-};
 
+// REGISTER NEW USER
 exports.post_user = (req, res) => {
   const { name, email, password } = req.body;
 

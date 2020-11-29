@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 
+// AUTHENTICATON MIDDLEWARE
 const auth = (req, res, next) => {
   const token = req.header("x-auth-token");
   //check for token

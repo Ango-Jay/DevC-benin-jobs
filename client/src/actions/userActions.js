@@ -1,6 +1,7 @@
 import axios from "axios";
 import { loadUser } from "./authActions";
 
+// ADD SKILL
 export const addSkill = ({ skillSet }) => (dispatch, getState) => {
   // set headers
   const config = {
@@ -25,6 +26,7 @@ export const addSkill = ({ skillSet }) => (dispatch, getState) => {
     });
 };
 
+// ADD SOCIAL ACCOUNT
 export const addSocial = ({ socialMedia }) => (dispatch, getState) => {
   // set headers
   const config = {

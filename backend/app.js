@@ -6,8 +6,8 @@ const userApi = require("./routes/api/users");
 const authApi = require("./routes/api/auth");
 const adminRoute = require("./routes/admin");
 
+const { PORT } = process.env;
 const app = express();
-const PORT = process.env.PORT || 5000;
 const localhost = "127.0.0.1";
 
 // allow CORS
@@ -22,8 +22,7 @@ app.use((req, res, next) => {
 //read from body
 app.use(express.json());
 
-/* app.use(express.urlencoded({ extended: true })); */
-//database config
+/* Database Config */
 //defualt mongoose connection
 const mongoDB = process.env.mongoURI;
 
@@ -38,19 +37,16 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => {
   console.log("Connected");
 });
-//database config
+/* Database Config */
 
 //routes
-app.use("/admin", adminRoute);
+app.use("/admin", adminRoute); // ADMIN
+// api routes
 app.use("/api/users", userApi);
 app.use("/api/auth", authApi);
 
 app.listen(PORT, () => {
-  //console.log("server running on ", PORT);
   console.log(chalk.green.bold(`The magic happens on ${localhost}:${PORT}`));
 });
 
 module.exports = app;
-
-//to run
-//C:/Users/REGINALD/DevC-benin-jobs/backend/app.js

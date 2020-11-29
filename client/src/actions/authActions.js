@@ -11,7 +11,7 @@ import {
 } from "./type";
 import { returnError } from "./errorActions";
 
-//check token and load user
+//Check token and load user
 export const loadUser = () => (dispatch, getState) => {
   //User loading
   dispatch({ type: USER_LOADING });
@@ -38,9 +38,6 @@ export const register = ({ name, email, password }) => (dispatch) => {
       "access-control-allow-origin": "*",
     },
   };
-  //request body
-  /*   const json_val = JSON.stringify({ name, email, password }); */
-  /*  const obj = {name.name, email.email, password.password}; */
 
   const body = JSON.stringify({ name, email, password });
 
@@ -72,9 +69,6 @@ export const login = ({ email, password }) => (dispatch) => {
       "access-control-allow-origin": "*",
     },
   };
-  //request body
-  /*   const json_val = JSON.stringify({ name, email, password }); */
-  /*  const obj = {name.name, email.email, password.password}; */
 
   const body = JSON.stringify({ email, password });
 
@@ -93,7 +87,6 @@ export const login = ({ email, password }) => (dispatch) => {
       dispatch({
         type: LOGIN_FAIL,
       });
-      /* return Promise.reject(err); */
     });
 };
 
@@ -104,7 +97,7 @@ export const logout = () => {
   };
 };
 
-//setup config and headers
+// setup config and headers
 export const tokenConfig = (getState) => {
   //get token from localStorage
   const token = getState().auth.token;
@@ -115,7 +108,7 @@ export const tokenConfig = (getState) => {
       "access-control-allow-origin": "*",
     },
   };
-  //add token to headers
+  // add token to headers
   if (token) {
     config.headers["x-auth-token"] = token;
   }

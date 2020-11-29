@@ -38,7 +38,7 @@ class SignIn extends Component {
     // if Authenticated load profile page
     const { history, isAuthenticated, user } = this.props;
     if (isAuthenticated === true) {
-      history.push(`/profile/${user._id}`);
+      history.push(`/profile/${user.id}`);
     }
     if (error !== prevProps.error) {
       //check for register error

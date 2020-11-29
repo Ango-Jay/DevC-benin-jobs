@@ -10,8 +10,3 @@ export const REGISTER_FAIL = "REGISTER_FAIL";
 //ERROR TYPES
 export const GET_ERRORS = "GET_ERRORS";
 export const CLEAR_ERRORS = "CLEAR_ERRORS";
-// USER TYPES
-export const UPDATE_PROFILE = "UPDATE_PROFILE";
-export const DELETE_PROFILE = "DELETE_PROFILE";
-export const ADD_SKILL = "ADD_SKILL";
-export const DELETE_SKILL = "DELETE_SKILL";

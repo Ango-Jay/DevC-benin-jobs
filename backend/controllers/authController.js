@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 /*USER API CONTROLLERS*/
+
+// GET USER DATA IF AUTHENTICATED
 exports.get_userdata = (req, res) => {
   User.findById(req.user.id)
     .select("-password")
@@ -11,6 +13,7 @@ exports.get_userdata = (req, res) => {
     });
 };
 
+// UPDATE USER SKILLSET
 exports.update_user_skill = (req, res) => {
   const { id } = req.query;
   const { skillSet } = req.body;
@@ -39,6 +42,7 @@ exports.update_user_skill = (req, res) => {
   });
 };
 
+// UPDATE USER SOCIAL ACCOUNTS
 exports.update_user_social = (req, res) => {
   const { id } = req.query;
   const { socialMedia } = req.body;
@@ -67,6 +71,7 @@ exports.update_user_social = (req, res) => {
   });
 };
 
+// LOGIN USER
 exports.post_user = (req, res) => {
   const { email, password } = req.body;
 
@@ -91,7 +96,19 @@ exports.post_user = (req, res) => {
         { expiresIn: 3600 },
         (err, token) => {
           if (err) throw err;
-          res.json({ token, user });
+          res.json({
+            token,
+            user: {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              location: user.location,
+              skillSet: user.skillSet,
+              socialMedia: user.socialMedia,
+              phoneNumber: user.phoneNumber,
+              role: user.role,
+            },
+          });
         }
       );
     });

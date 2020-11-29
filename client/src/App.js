@@ -14,10 +14,6 @@ class App extends Component {
     store.dispatch(loadUser());
   }
   render() {
-    // const {
-    //   match: { params },
-    // } = this.props;
-    // const { user } = store.getState().auth.user;
     return (
       <Provider store={store}>
         <React.Fragment>
